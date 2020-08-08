@@ -1,5 +1,6 @@
 const fs = require('fs');
 const express = require('express');
+const { create } = require('domain');
 
 const app = express();
 
@@ -9,8 +10,8 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-// Handeling GET requests
-app.get('/api/v1/tours', (req, res) => {
+// Callback functions declarations
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -18,9 +19,9 @@ app.get('/api/v1/tours', (req, res) => {
       tours,
     },
   });
-});
+};
 
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTour = (req, res) => {
   const id = parseInt(req.params.id);
   const tour = tours.find((el) => el.id === id);
 
@@ -37,10 +38,9 @@ app.get('/api/v1/tours/:id', (req, res) => {
       tour,
     },
   });
-});
+};
 
-// Handeling POST requests
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
   const newId = tours[tours.length - 1].id - 1;
   const newTour = Object.assign({ id: newId }, req.body);
 
@@ -58,10 +58,9 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
-});
+};
 
-// Handeling PATCH requests
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
   if (parseInt(req.params.id) > tours.length) {
     return res.status(404).json({
       status: 'fail',
@@ -75,7 +74,31 @@ app.patch('/api/v1/tours/:id', (req, res) => {
       tour: 'Updated the tour',
     },
   });
-});
+};
+
+const deleteTour = (req, res) => {
+  if (parseInt(req.params.id) > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+};
+
+// GET and POST req
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
+// GET, PATCH, and DELETE req
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 const port = 3000;
 app.listen(port, () => {
