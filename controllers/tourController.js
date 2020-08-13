@@ -3,8 +3,20 @@ const Tour = require('./../models/tourModel');
 // Route handelers
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    // BUILD QUERY
 
+    // const queryObj = { ...req.query };
+    // const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    // excludedFields.forEach((el) => delete queryObj[el]);           <- Event Loop blocking
+
+    const { page, sort, limit, fields, ...queryObj } = req.query; // Does exactly as the above func
+
+    const query = Tour.find(queryObj);
+
+    // EXECUTE QUERY
+    const tours = await query;
+
+    // SEND RESPONSE
     res.status(200).json({
       status: 'success',
       results: tours.length,
