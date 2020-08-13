@@ -9,9 +9,30 @@ exports.getAllTours = async (req, res) => {
     // const excludedFields = ['page', 'sort', 'limit', 'fields'];
     // excludedFields.forEach((el) => delete queryObj[el]);           <- Event Loop blocking
 
+    // Filtering
     const { page, sort, limit, fields, ...queryObj } = req.query; // Does exactly as the above func
 
-    const query = Tour.find(queryObj);
+    // Adv Filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    let query = Tour.find(JSON.parse(queryStr));
+
+    // Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
+
+    // Field Limiting
+    if (req.query.fields) {
+      const fieldsVal = req.query.fields.split(',').join(' ');
+      query = query.select(fieldsVal);
+    } else {
+      query = query.select('-__v');
+    }
 
     // EXECUTE QUERY
     const tours = await query;
