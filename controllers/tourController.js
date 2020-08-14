@@ -1,14 +1,16 @@
 const Tour = require('./../models/tourModel');
 
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage, price';
+  req.query.fields = 'name, price, ratingsAverage, summary, difficulty';
+  next();
+};
+
 // Route handelers
 exports.getAllTours = async (req, res) => {
   try {
     // BUILD QUERY
-
-    // const queryObj = { ...req.query };
-    // const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    // excludedFields.forEach((el) => delete queryObj[el]);           <- Event Loop blocking
-
     // 1A. Filtering
     const { page, sort, limit, fields, ...queryObj } = req.query; // Does exactly as the above func
 
