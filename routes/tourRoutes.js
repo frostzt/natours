@@ -10,6 +10,7 @@ router
 
 // Aggregation Pipeline
 router.route('/tour-stats').get(tourController.getTourStats);
+router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
 
 // GET and POST req
 router
