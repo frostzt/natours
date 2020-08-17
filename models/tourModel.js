@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+// const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -8,6 +9,15 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have a name!'],
       unique: true,
       trim: true,
+      maxlength: [
+        40,
+        'A tour name should be less than or equal to 40 characters',
+      ],
+      minlength: [
+        10,
+        'A tour name should be more than or equal to 10 characters',
+      ],
+      // validate: [validator.isAlpha, 'Tour name must only contain characters'],
     },
     slug: String,
     duration: {
@@ -21,6 +31,10 @@ const tourSchema = new mongoose.Schema(
     difficulty: {
       type: String,
       required: [true, 'A tour must have a difficulty'],
+      enum: {
+        values: ['easy', 'medium', 'difficult'],
+        message: 'Difficulty could be either: easy, medium, or difficult',
+      },
     },
     price: {
       type: Number,
@@ -29,12 +43,23 @@ const tourSchema = new mongoose.Schema(
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      min: [1, 'A rating must be above 1.0'],
+      max: [5, 'A rating must be below 5.0'],
     },
     ratingsQuantity: {
       type: Number,
       default: 0,
     },
-    priceDiscount: Number,
+    priceDiscount: {
+      type: Number,
+      validate: {
+        validator: function (val) {
+          return val < this.price;
+        },
+        message:
+          'Discount price ({VALUE}) should be lower than the regular price',
+      },
+    },
     summary: {
       type: String,
       trim: true,
@@ -89,6 +114,7 @@ tourSchema.post(/^find/, function (docs, next) {
 
 // Aggregation Middleware
 tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
   next();
 });
 
