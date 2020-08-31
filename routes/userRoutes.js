@@ -8,15 +8,18 @@ const router = express.Router();
 router.post('/signup', authController.signUp);
 router.post('/login', authController.login);
 
-// Forgot and reset
+// Forgot and reset user password
 router.post('/forgotPassword', authController.forgotPassword);
-router.patch('/resetPassword/:token', authController.resetPassword);
+router.delete('/resetPassword/:token', authController.resetPassword);
 
+// Update user data or delete user
 router.patch(
   '/updateMyPassword',
   authController.protect,
   authController.updatePassword
 );
+router.patch('/updateMe', authController.protect, userController.updateMe);
+router.delete('/deleteMe', authController.protect, userController.deleteMe);
 
 // GET and POST req
 router
