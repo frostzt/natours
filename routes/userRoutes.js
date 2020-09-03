@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
+const { route } = require('./reviewRoutes');
 
 const router = express.Router();
 
@@ -10,16 +11,19 @@ router.post('/login', authController.login);
 
 // Forgot and reset user password
 router.post('/forgotPassword', authController.forgotPassword);
-router.delete('/resetPassword/:token', authController.resetPassword);
+router.patch('/resetPassword/:token', authController.resetPassword);
+
+// Protect all routes after this middleware
+router.use(authController.protect);
 
 // Update user data or delete user
-router.patch(
-  '/updateMyPassword',
-  authController.protect,
-  authController.updatePassword
-);
-router.patch('/updateMe', authController.protect, userController.updateMe);
-router.delete('/deleteMe', authController.protect, userController.deleteMe);
+router.patch('/updateMyPassword', authController.updatePassword);
+router.patch('/updateMe', userController.updateMe);
+router.delete('/deleteMe', userController.deleteMe);
+router.get('/me', userController.getMe, userController.getUser);
+
+// Restrict the actions below to administrator only
+router.use(authController.restrictTo('admin'));
 
 // GET and POST req
 router
