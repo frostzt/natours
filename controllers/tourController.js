@@ -1,7 +1,5 @@
 const Tour = require('./../models/tourModel');
-const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
-const AppError = require('../utils/appError');
 const factory = require('./handlerFactory');
 
 exports.aliasTopTours = (req, res, next) => {
@@ -11,63 +9,24 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-/*ROUTE-HANDLERS*/
-// GET ALL THE TOURS
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  // EXECUTE QUERY
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
+exports.setTourId = (req, res, next) => {
+  if (req.params.tourId) req.query.tour = req.params.tourId;
+  next();
+};
 
-  const tours = await features.query;
-
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
-
-// GET A SPECIFIC TOUR
-exports.getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate('reviews');
-
-  if (!tour) {
-    return next(new AppError('No Tour found with that ID', 404));
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-});
-
-// CREATE A NEW TOUR
-exports.createTour = catchAsync(async (req, res, next) => {
-  const newTour = await Tour.create(req.body);
-
-  res.status(201).json({
-    status: 'success',
-    data: {
-      tour: newTour,
-    },
-  });
-});
-
-// UPDATE AN EXISTING TOUR
+/***************
+ROUTE-HANDLERS
+***************/
+// CREATE, UPDATE, DELETE AN EXISTING TOUR
+exports.getAllTours = factory.getAll(Tour);
+exports.createTour = factory.createOne(Tour);
+exports.getTour = factory.getOne(Tour, { path: 'reviews' });
 exports.updateTour = factory.updateOne(Tour);
-
-// DELETE AN EXISTING TOUR
 exports.deleteTour = factory.deleteOne(Tour);
 
-/*AGGREGATION PIPELINE*/
+/***************
+AGGREGATION PIPELINE
+***************/
 // GET TOUR STATUS
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
