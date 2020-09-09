@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -11,10 +12,17 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // GLOBAL Middlewares
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Set security headers
 app.use(helmet());
 
@@ -30,13 +38,6 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP try again in an hour!',
 });
 app.use('/api', limiter);
-
-// const loginAttemptLimiter = rateLimit({
-//   max: 2,
-//   windowMs: 30 * 60 * 1000,
-//   message: 'Max password attempts expired! Please try again after 30 mins!',
-// });
-// app.use('/api/v1/users/login', loginAttemptLimiter);
 
 // Body parser, reading data from req.body
 app.use(express.json({ limit: '10kb' }));
@@ -61,9 +62,6 @@ app.use(
   })
 );
 
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
-
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -71,6 +69,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/review', reviewRouter);
