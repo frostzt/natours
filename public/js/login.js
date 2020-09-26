@@ -4,6 +4,12 @@ const login = async (email, password) => {
   try {
     console.log(email, password);
     const res = await axios({
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      //   'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+      //   'Access-Control-Allow-Headers': 'Content-Type',
+      // },
       method: 'POST',
       url: 'http://127.0.0.1/api/v1/users/login',
       data: {
@@ -11,6 +17,7 @@ const login = async (email, password) => {
         password,
       },
     });
+
     console.log(res);
   } catch (err) {
     console.log(err);

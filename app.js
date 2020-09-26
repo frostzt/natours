@@ -21,12 +21,17 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // GLOBAL Middlewares
-app.use(
-  cors({
-    origin: '127.0.0.1:3000',
-    credentials: true,
-  })
-);
+// Implementing CORS
+app.use(cors());
+
+app.options('*', cors());
+
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
