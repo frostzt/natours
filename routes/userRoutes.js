@@ -1,13 +1,13 @@
 const express = require('express');
 const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
-const { route } = require('./reviewRoutes');
 
 const router = express.Router();
 
-// Signup and login
+// Signup, login, and logout
 router.post('/signup', authController.signUp);
 router.post('/login', authController.login);
+router.get('/logout', authController.logout);
 
 // Forgot and reset user password
 router.post('/forgotPassword', authController.forgotPassword);
