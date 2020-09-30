@@ -21,5 +21,8 @@
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }],
     "import/no-useless-path-segments": "off"
+  },
+  "parserOptions": {
+    "sourceType": "module"
   }
 }
