@@ -23,7 +23,10 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: {
     type: Date,
   },
-  photo: String,
+  photo: {
+    type: String,
+    default: 'default.jpg',
+  },
   password: {
     type: String,
     required: [true, 'Please make a password for your account!'],
