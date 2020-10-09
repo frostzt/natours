@@ -2,8 +2,11 @@ const express = require('express');
 
 const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
+const reviewRouter = require('./../routes/reviewRoutes');
 
 const router = express.Router();
+
+router.use('/:userId/reviews', userController.setUserId, reviewRouter);
 
 // Signup, login, and logout
 router.post('/signup', authController.signUp);

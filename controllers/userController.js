@@ -70,6 +70,11 @@ exports.getMe = (req, res, next) => {
   next();
 };
 
+exports.setUserId = (req, res, next) => {
+  if (req.params.userId) req.query.user = req.params.userId;
+  next();
+};
+
 // Update user data
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1. Create Error if user tries to update password

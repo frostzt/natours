@@ -49,6 +49,12 @@ exports.getLoginForm = (req, res) => {
   });
 };
 
+exports.getSignupForm = (req, res) => {
+  res.status(200).render('signup', {
+    title: 'Sign up for an account',
+  });
+};
+
 exports.getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your account',
@@ -66,6 +72,12 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   res.status(200).render('overview', {
     title: 'My tours',
     tours,
+  });
+});
+
+exports.getMyReviews = catchAsync(async (req, res, next) => {
+  res.status(200).render('reviews', {
+    title: 'Your reviews',
   });
 });
 
