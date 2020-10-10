@@ -1,6 +1,7 @@
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingsModel');
+const Review = require('../models/reviewModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -76,8 +77,17 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
 });
 
 exports.getMyReviews = catchAsync(async (req, res, next) => {
+  // Find the reviews matching the user
+  const reviews = await Review.find({ user: req.user.id }).populate({
+    path: 'tour',
+    fields: 'name imageCover',
+  });
+
+  console.log(reviews);
+
   res.status(200).render('reviews', {
     title: 'Your reviews',
+    reviews,
   });
 });
 

@@ -1,13 +1,13 @@
 extends base
 
 mixin reviewCard(review)
-  .reviews__card
+  .reviews__card.ma-bt-lg
     .reviews__avatar
       img.reviews__avatar-img(
-        src=`/img/users/${review.user.photo}`,
+        src=`/img/tours/${review.tour.imageCover}`,
         alt=review.user.name
       )
-      h6.reviews__user= review.user.name
+      h6.reviews__user= review.tour.name
     p.reviews__text= review.review
     .reviews__rating
       each star in [1,2,3,4,5]
@@ -17,5 +17,6 @@ mixin reviewCard(review)
           use(xlink:href='/img/icons.svg#icon-star')
 
 block content
-  main.main
-    +reviewCard
+  main.main.my-reviews
+    each review in reviews
+      +reviewCard(review)
