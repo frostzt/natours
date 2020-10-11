@@ -83,8 +83,6 @@ exports.getMyReviews = catchAsync(async (req, res, next) => {
     fields: 'name imageCover',
   });
 
-  console.log(reviews);
-
   res.status(200).render('reviews', {
     title: 'Your reviews',
     reviews,

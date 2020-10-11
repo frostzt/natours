@@ -238,6 +238,14 @@ body {
   background-color: #55c57a;
 }
 
+.btn--red {
+  background-color: #f6416c;
+  color: #fff;
+}
+.btn--red::after {
+  background-color: #f6416c;
+}
+
 .btn--small {
   padding: 1.25rem 3rem !important;
   font-size: 1.4rem !important;
@@ -610,6 +618,7 @@ body {
 }
 .reviews__card {
   width: 30rem;
+  height: 30rem;
   padding: 4rem;
   background-color: #f7f7f7;
   border-radius: 3px;
@@ -619,6 +628,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  transition: all 0.2s;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
@@ -1329,4 +1339,37 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+.my-review:hover {
+  transform: scale(1.1);
+}
+.review__buttons {
+  background-color: #f3f3f3;
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  height: 8rem;
+  width: 30rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  transform: translateY(25rem);
+  visibility: collapse;
+  opacity: 0;
+  transition: all 0.2s;
+  line-height: 1;
+}
+.my-review:hover .review__buttons {
+  visibility: visible;
+  opacity: 1;
+}
+.back-btn {
+  display: block;
+  line-height: 1;
+  width: 11rem;
+  height: 4rem;
+  white-space: nowrap;
+  transform: translateY(-5rem);
+}
+.back-btn:hover {
+  transform: translateY(-5.3rem);
 }
