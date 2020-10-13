@@ -9210,7 +9210,7 @@ if (myReview) {
     if (e.target !== e.currentTarget) {
       if (e.target.id === 'delete-review') {
         var id = e.target.parentNode.dataset.id;
-        confirmDelete(id, 'delete');
+        confirmAction(id, 'delete');
       }
     }
 
@@ -9220,7 +9220,9 @@ if (myReview) {
 
 function confirmAction(id, type) {
   if (type === 'delete') {
-    (0, _updateReview.deleteReview)(id);
+    var html;
+    html = "\n            <div class=\"overlay\">\n              <div class=\"main-content ".concat(type, "\">\n                <h2 class=\"main-content__heading ma-bt-lg\">Are you sure?</h2>\n                <div class=\"confirm-buttons\">\n                  <a id=\"confirm-yes\" class=\"btn btn--green btn--small\">Yes</a>\n                  <a id=\"confirm-no\" class=\"btn btn--red btn--small\">No</a>\n                </div>\n              </div>\n            </div>\n    ");
+    document.querySelector('body').insertAdjacentHTML('afterbegin', html); // deleteReview(id);
   }
 }
 
@@ -9254,7 +9256,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "1936" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "28887" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -93,7 +93,7 @@ if (myReview) {
     if (e.target !== e.currentTarget) {
       if (e.target.id === 'delete-review') {
         const id = e.target.parentNode.dataset.id;
-        confirmDelete(id, 'delete');
+        confirmAction(id, 'delete');
       }
     }
     e.stopPropagation();
@@ -102,7 +102,20 @@ if (myReview) {
 
 function confirmAction(id, type) {
   if (type === 'delete') {
-    deleteReview(id);
+    let html;
+    html = `
+            <div class="overlay">
+              <div class="main-content ${type}">
+                <h2 class="main-content__heading ma-bt-lg">Are you sure?</h2>
+                <div class="confirm-buttons">
+                  <a id="confirm-yes" class="btn btn--green btn--small">Yes</a>
+                  <a id="confirm-no" class="btn btn--red btn--small">No</a>
+                </div>
+              </div>
+            </div>
+    `;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', html);
+    // deleteReview(id);
   }
 }
 
