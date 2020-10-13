@@ -115,7 +115,14 @@ function confirmAction(id, type) {
             </div>
     `;
     document.querySelector('body').insertAdjacentHTML('afterbegin', html);
-    // deleteReview(id);
+    const confirmYes = document.getElementById('confirm-yes');
+    confirmYes.addEventListener('click', () => {
+      confirmYes.textContent = 'Deleting...';
+      deleteReview(id);
+    });
+    document.getElementById('confirm-no').addEventListener('click', () => {
+      document.querySelector('.overlay').remove();
+    });
   }
 }
 

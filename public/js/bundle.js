@@ -9222,7 +9222,15 @@ function confirmAction(id, type) {
   if (type === 'delete') {
     var html;
     html = "\n            <div class=\"overlay\">\n              <div class=\"main-content ".concat(type, "\">\n                <h2 class=\"main-content__heading ma-bt-lg\">Are you sure?</h2>\n                <div class=\"confirm-buttons\">\n                  <a id=\"confirm-yes\" class=\"btn btn--green btn--small\">Yes</a>\n                  <a id=\"confirm-no\" class=\"btn btn--red btn--small\">No</a>\n                </div>\n              </div>\n            </div>\n    ");
-    document.querySelector('body').insertAdjacentHTML('afterbegin', html); // deleteReview(id);
+    document.querySelector('body').insertAdjacentHTML('afterbegin', html);
+    var confirmYes = document.getElementById('confirm-yes');
+    confirmYes.addEventListener('click', function () {
+      confirmYes.textContent = 'Deleting...';
+      (0, _updateReview.deleteReview)(id);
+    });
+    document.getElementById('confirm-no').addEventListener('click', function () {
+      document.querySelector('.overlay').remove();
+    });
   }
 }
 
