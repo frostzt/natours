@@ -87,6 +87,7 @@ body {
 }
 
 .alert {
+  z-index: 999999999999999999999999;
   position: fixed;
   top: 0;
   left: 50%;
@@ -1404,7 +1405,18 @@ body {
   width: 30%;
   height: 30%;
 }
+.update {
+  width: 80%;
+  height: 80%;
+}
 .confirm-buttons {
   display: flex;
   justify-content: space-around;
+}
+#review_text {
+  width: 80%;
+  height: 50%;
+  resize: none;
+  outline: none;
+  padding: 1rem;
 }
