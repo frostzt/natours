@@ -6,6 +6,7 @@ import { signup } from './signup';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
 import { showAlert } from './alerts';
+import { deleteReview } from './updateReview';
 
 // DOM Elements
 const mapBox = document.getElementById('map');
@@ -15,6 +16,9 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const formUserData = document.querySelector('.form-user-data');
 const formUserPassword = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
+const myReview = document.querySelector('.my-reviews');
+const deleteBtn = document.getElementById('delete-review');
+const updateBtn = document.getElementById('update-review');
 
 // Delegation
 if (mapBox) {
@@ -82,6 +86,24 @@ if (bookBtn) {
     const { tourId } = e.target.dataset;
     bookTour(tourId);
   });
+}
+
+if (myReview) {
+  myReview.addEventListener('click', (e) => {
+    if (e.target !== e.currentTarget) {
+      if (e.target.id === 'delete-review') {
+        const id = e.target.parentNode.dataset.id;
+        confirmDelete(id, 'delete');
+      }
+    }
+    e.stopPropagation();
+  });
+}
+
+function confirmAction(id, type) {
+  if (type === 'delete') {
+    deleteReview(id);
+  }
 }
 
 const alertMessage = document.querySelector('body').dataset.alert;

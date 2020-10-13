@@ -15,9 +15,9 @@ mixin reviewCard(review)
           class=`reviews__star--${review.rating >= star ? "active" : "inactive"}`
         )
           use(xlink:href='/img/icons.svg#icon-star')
-    .review__buttons
-      a#updateReview.btn.btn--green.btn--small Update
-      a#deleteReview.btn.btn--red.btn--small Delete
+    .review__buttons(data-id=`${review.id}`)
+      a#update-review.btn.btn--green.btn--small Update
+      a#delete-review.btn.btn--red.btn--small Delete
 
 block content
   main.main
