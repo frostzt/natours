@@ -102,12 +102,6 @@ app.use(
 
 app.use(compression());
 
-// Test middleware
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  next();
-});
-
 // Routes
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);

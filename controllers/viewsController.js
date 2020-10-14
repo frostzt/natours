@@ -32,11 +32,18 @@ exports.getTour = catchAsync(async (req, res, next) => {
     fields: 'review rating user',
   });
 
-  const bookings = await Booking.find();
-  console.log(bookings);
-
   if (!tour) {
     return next(new AppError('There is no tour with that name!', 404));
+  }
+
+  // Is the tour booked by the user
+  if (res.locals.user._id) {
+    const bookings = await Booking.find({ user: res.locals.user._id });
+    bookings.forEach((el) => {
+      if (el.tour.id === tour.id) {
+        tour.isBookedByUser = true;
+      }
+    });
   }
 
   // 2. Build templates
