@@ -6,7 +6,7 @@ import { signup } from './signup';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
 import { showAlert } from './alerts';
-import confirmAction from './confirmAction';
+import { confirmAction, createReview } from './confirmAction';
 
 // DOM Elements
 const mapBox = document.getElementById('map');
@@ -88,6 +88,11 @@ if (bookBtn) {
 }
 
 if (reviewBtn) {
+  reviewBtn.addEventListener('click', (e) => {
+    const tour = reviewBtn.dataset.tourId;
+    const user = reviewBtn.dataset.userId;
+    createReview(tour, user);
+  });
 }
 
 // Update reviews

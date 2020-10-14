@@ -8772,7 +8772,7 @@ exports.bookTour = bookTour;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deleteReview = exports.updateReview = void 0;
+exports.deleteReview = exports.updateReview = exports.addReview = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -8784,8 +8784,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var updateReview = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(reviewId, review) {
+var addReview = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(review, rating, tour, user) {
     var res;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -8794,10 +8794,13 @@ var updateReview = /*#__PURE__*/function () {
             _context.prev = 0;
             _context.next = 3;
             return (0, _axios.default)({
-              method: 'PATCH',
-              url: "/api/v1/review/".concat(reviewId),
+              method: 'POST',
+              url: '/api/v1/review/',
               data: {
-                review: review
+                review: review,
+                rating: rating,
+                tour: tour,
+                user: user
               }
             });
 
@@ -8805,9 +8808,9 @@ var updateReview = /*#__PURE__*/function () {
             res = _context.sent;
 
             if (res.data.status === 'success') {
-              (0, _alerts.showAlert)(res.data.status, 'Review updated!');
+              (0, _alerts.showAlert)(res.data.status, 'Thanks for your review!');
               window.setTimeout(function () {
-                location.assign('/my-reviews');
+                location.reload();
               }, 1500);
             }
 
@@ -8827,15 +8830,15 @@ var updateReview = /*#__PURE__*/function () {
     }, _callee, null, [[0, 7]]);
   }));
 
-  return function updateReview(_x, _x2) {
+  return function addReview(_x, _x2, _x3, _x4) {
     return _ref.apply(this, arguments);
   };
 }();
 
-exports.updateReview = updateReview;
+exports.addReview = addReview;
 
-var deleteReview = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(reviewId) {
+var updateReview = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(reviewId, review) {
     var res;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
@@ -8844,18 +8847,21 @@ var deleteReview = /*#__PURE__*/function () {
             _context2.prev = 0;
             _context2.next = 3;
             return (0, _axios.default)({
-              method: 'DELETE',
-              url: "/api/v1/review/".concat(reviewId)
+              method: 'PATCH',
+              url: "/api/v1/review/".concat(reviewId),
+              data: {
+                review: review
+              }
             });
 
           case 3:
             res = _context2.sent;
 
-            if (res.status === 204) {
-              (0, _alerts.showAlert)('success', 'Review deleted!');
+            if (res.data.status === 'success') {
+              (0, _alerts.showAlert)(res.data.status, 'Review updated!');
               window.setTimeout(function () {
                 location.assign('/my-reviews');
-              }, 1000);
+              }, 1500);
             }
 
             _context2.next = 10;
@@ -8874,8 +8880,55 @@ var deleteReview = /*#__PURE__*/function () {
     }, _callee2, null, [[0, 7]]);
   }));
 
-  return function deleteReview(_x3) {
+  return function updateReview(_x5, _x6) {
     return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.updateReview = updateReview;
+
+var deleteReview = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(reviewId) {
+    var res;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return (0, _axios.default)({
+              method: 'DELETE',
+              url: "/api/v1/review/".concat(reviewId)
+            });
+
+          case 3:
+            res = _context3.sent;
+
+            if (res.status === 204) {
+              (0, _alerts.showAlert)('success', 'Review deleted!');
+              window.setTimeout(function () {
+                location.assign('/my-reviews');
+              }, 1000);
+            }
+
+            _context3.next = 10;
+            break;
+
+          case 7:
+            _context3.prev = 7;
+            _context3.t0 = _context3["catch"](0);
+            (0, _alerts.showAlert)('error', _context3.t0);
+
+          case 10:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[0, 7]]);
+  }));
+
+  return function deleteReview(_x7) {
+    return _ref3.apply(this, arguments);
   };
 }();
 
@@ -8886,7 +8939,8 @@ exports.deleteReview = deleteReview;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.confirmAction = confirmAction;
+exports.createReview = createReview;
 
 var _updateReview = require("./updateReview");
 
@@ -8924,8 +8978,20 @@ function confirmAction(id, type) {
   }
 }
 
-var _default = confirmAction;
-exports.default = _default;
+function createReview(tour, user) {
+  var html = "\n    <div class=\"overlay\">\n      <div class=\"main-content update\">\n        <h2 class=\"main-content__heading ma-bt-lg\">Leave a review!</h2>\n        <textarea class=\"ma-bt-lg\" id=\"review_text\" placeholder=\"Your review...\"></textarea>\n        <label for=\"cars\">Your review:</label>\n        <select name=\"rating\" id=\"rating\">\n          <option value=\"1\">1</option>\n          <option value=\"2\">2</option>\n          <option value=\"3\">3</option>\n          <option value=\"4\">4</option>\n          <option value=\"5\">5</option>\n        </select>\n        <div class=\"confirm-buttons\">\n          <a id=\"confirm-yes\" class=\"btn btn--green btn--small\">Add</a>\n          <a id=\"confirm-no\" class=\"btn btn--red btn--small\">Cancel</a>\n        </div>\n      </div>\n    </div>\n  ";
+  document.querySelector('body').insertAdjacentHTML('afterbegin', html);
+  var confirmYes = document.getElementById('confirm-yes');
+  confirmYes.addEventListener('click', function () {
+    confirmYes.textContent = 'Thank you...';
+    var review = document.getElementById('review_text').value;
+    var rating = document.getElementById('rating').value;
+    (0, _updateReview.addReview)(review, rating, tour, user);
+  });
+  document.getElementById('confirm-no').addEventListener('click', function () {
+    document.querySelector('.overlay').remove();
+  });
+}
 },{"./updateReview":"updateReview.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -9197,9 +9263,7 @@ var _stripe = require("./stripe");
 
 var _alerts = require("./alerts");
 
-var _confirmAction = _interopRequireDefault(require("./confirmAction"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _confirmAction = require("./confirmAction");
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -9302,7 +9366,13 @@ if (bookBtn) {
   });
 }
 
-if (reviewBtn) {} // Update reviews
+if (reviewBtn) {
+  reviewBtn.addEventListener('click', function (e) {
+    var tour = reviewBtn.dataset.tourId;
+    var user = reviewBtn.dataset.userId;
+    (0, _confirmAction.createReview)(tour, user);
+  });
+} // Update reviews
 
 
 if (myReview) {
@@ -9310,10 +9380,10 @@ if (myReview) {
     if (e.target !== e.currentTarget) {
       if (e.target.id === 'delete-review') {
         var id = e.target.parentNode.dataset.id;
-        (0, _confirmAction.default)(id, 'delete');
+        (0, _confirmAction.confirmAction)(id, 'delete');
       } else if (e.target.id === 'update-review') {
         var _id = e.target.parentNode.dataset.id;
-        (0, _confirmAction.default)(_id, 'update');
+        (0, _confirmAction.confirmAction)(_id, 'update');
       }
     }
 

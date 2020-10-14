@@ -42,6 +42,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
     bookings.forEach((el) => {
       if (el.tour.id === tour.id) {
         tour.isBookedByUser = true;
+        tour.userId = res.locals.user._id;
       }
     });
   }

@@ -146,5 +146,6 @@ block content
           h2.heading-secondary= `Your thoughts about ${tour.name} tour?`
           p.cta__text Make sure to leave a review if you loved this tour!
           button#review-tour.btn.btn--green.span-all-rows(
-            data-tour-id=`${tour.id}`
+            data-tour-id=`${tour.id}`,
+            data-user-id=`${tour.userId}`
           ) Leave a review!
