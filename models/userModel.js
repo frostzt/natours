@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please enter your email!'],
     unique: true,
     lowercase: true,
-    validator: [validator.isEmail, 'The email entered is not valid'],
+    validate: [validator.isEmail, 'The email entered is not valid'],
   },
   role: {
     type: String,
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date,
   active: {
     type: Boolean,
-    default: true,
+    default: false,
     select: false,
   },
 });
@@ -64,7 +64,7 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.pre('save', function (next) {
-  if (!this.isModified('password') || this.inNew) return next();
+  if (!this.isModified('password') || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
   next();
