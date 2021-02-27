@@ -59,18 +59,18 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 2. Check if the user exists and the password is correct
-  const user = await User.findOne({ email }).select('+password +active');
+  const user = await User.findOne({ email }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password.', 401));
   }
 
   // 3. Check if the user has verified his or her id
-  if (!user.active) {
-    return next(
-      new AppError('Sorry you have not yet verified your account.', 401)
-    );
-  }
+  // if (!user.active) {
+  //   return next(
+  //     new AppError('Sorry you have not yet verified your account.', 401)
+  //   );
+  // }
 
   // 4. If everything is fine send token to the client
   createSendToken(user, 200, req, res);

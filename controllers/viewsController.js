@@ -37,15 +37,15 @@ exports.getTour = catchAsync(async (req, res, next) => {
   }
 
   // Is the tour booked by the user
-  if (res.locals.user._id) {
-    const bookings = await Booking.find({ user: res.locals.user._id });
-    bookings.forEach((el) => {
-      if (el.tour.id === tour.id) {
-        tour.isBookedByUser = true;
-        tour.userId = res.locals.user._id;
-      }
-    });
-  }
+  // if (res.locals.user.id) {
+  //   const bookings = await Booking.find({ user: res.locals.user._id });
+  //   bookings.forEach((el) => {
+  //     if (el.tour.id === tour.id) {
+  //       tour.isBookedByUser = true;
+  //       tour.userId = res.locals.user._id;
+  //     }
+  //   });
+  // }
 
   // 2. Build templates
   // 3. Render that template from the step 1
